@@ -16,7 +16,7 @@ public class InputManager : MonoBehaviour
         var mouse = Mouse.current;
         if(mouse == null) return;
 
-        if(mouse.leftButton.wasPressedThisFrame) {
+        if(mouse.leftButton.isPressed) {                //mouse is held down
             if(debug) Debug.Log("Left Mouse Button was pressed this frame");
             
             if(gun != null) {
