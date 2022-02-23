@@ -35,7 +35,13 @@ public class Gun : MonoBehaviour
         }  
     }
 
-    public void Fire() {
+        //idk how to do rate of fire but I think it would be something like
+        //if mousehelddown and allowFire is true then shoot
+        //fire then set allowFire to false and after .1seconds set allowFire back to true
+        //i just dont know how to code that in
+
+
+    public void Fire() {            
         
         if(clip > 0) {
             if(debug) Debug.Log("Pow!");
@@ -46,6 +52,8 @@ public class Gun : MonoBehaviour
             bullet.transform.Translate(0,0,1);
             // add forward force to the gun
             bullet.AddRelativeForce(Vector3.forward * bulletForce, ForceMode.Impulse);
+            
+            
         } else {
             if(debug) Debug.Log("Out of Ammo!");
         }
