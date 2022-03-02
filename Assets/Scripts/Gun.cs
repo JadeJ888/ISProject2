@@ -9,6 +9,7 @@ public class Gun : MonoBehaviour
    
     [Range(10,100)]
     public float bulletForce = 50;
+    public float fireRate = 0.15f;
 
     public bool debug = false; //set true to display debug msgs
     //private variables
@@ -16,8 +17,11 @@ public class Gun : MonoBehaviour
     public int clipSize = 10;
     public int clip = 0;
 
-    public void Reload() {
-        if(clip == clipSize) {                              
+    bool canShoot = true;
+
+
+    public void Reload() {                                      //I think I wanna add a delay later and an animation in the polish stage here
+        if(clip == clipSize) {                                  //if I can figure that out
             if(debug) Debug.Log("Clip is already full.");
             return;
         }
@@ -43,19 +47,29 @@ public class Gun : MonoBehaviour
 
     public void Fire() {            
         
-        if(clip > 0) {
-            if(debug) Debug.Log("Pow!");
-            clip -= 1;
-            // create a copy of the bullet prefab
-            Rigidbody bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
-            // move the bullet in front of the gun
-            bullet.transform.Translate(0,0,1);
-            // add forward force to the gun
-            bullet.AddRelativeForce(Vector3.forward * bulletForce, ForceMode.Impulse);
-            
-            
-        } else {
-            if(debug) Debug.Log("Out of Ammo!");
+        if(canShoot) {
+                if(clip > 0) {
+                if(debug) Debug.Log("Pow!");
+                clip -= 1;
+                // create a copy of the bullet prefab
+                Rigidbody bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
+                // move the bullet in front of the gun
+                bullet.transform.Translate(0,0,1);
+                // add forward force to the gun
+                bullet.AddRelativeForce(Vector3.forward * bulletForce, ForceMode.Impulse);
+                
+                StartCoroutine(Cooldown());
+
+            } else {
+                if(debug) Debug.Log("Out of Ammo!");
+            }
         }
     }
+
+    IEnumerator Cooldown() {
+        canShoot = false; 
+        yield return new WaitForSeconds(fireRate);
+        canShoot = true;
+    }
+
 }

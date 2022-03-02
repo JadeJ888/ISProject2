@@ -10,6 +10,10 @@ public class InputManager : MonoBehaviour
 
     public bool debug = false;   //make true to display debug msgs
 
+    void Start() {
+        if(debug) Debug.Log("Input manager is starting!");
+    }
+
     // Update is called once per frame
     void Update()
     {
