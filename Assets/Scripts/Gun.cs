@@ -12,12 +12,24 @@ public class Gun : MonoBehaviour
     public float fireRate = 0.15f;
 
     public bool debug = false; //set true to display debug msgs
+    [Header("Audio")]
+    public AudioClip fire, getAmmo;          //make one for reload, shoot, pick up ammo, out of bullets
+
     //private variables
+    [Header("Ammo Management")]
     public int totalAmmo = 60;
     public int clipSize = 10;
     public int clip = 0;
 
+    private AudioSource aud;                
+
     bool canShoot = true;
+
+    
+
+    void Start() {
+        aud = this.gameObject.GetComponent<AudioSource>();
+    }
 
 
     public void Reload() {                                      //I think I wanna add a delay later and an animation in the polish stage here
@@ -50,6 +62,7 @@ public class Gun : MonoBehaviour
         if(canShoot) {
                 if(clip > 0) {
                 if(debug) Debug.Log("Pow!");
+                
                 clip -= 1;
                 // create a copy of the bullet prefab
                 Rigidbody bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
@@ -57,13 +70,17 @@ public class Gun : MonoBehaviour
                 bullet.transform.Translate(0,0,1);
                 // add forward force to the gun
                 bullet.AddRelativeForce(Vector3.forward * bulletForce, ForceMode.Impulse);
-                
                 StartCoroutine(Cooldown());
-
+                aud.PlayOneShot(fire);                //PlayOneShot() will overlap sounds and .play with play once
             } else {
                 if(debug) Debug.Log("Out of Ammo!");
             }
         }
+    }
+
+    public void GetAmmo() {
+        totalAmmo += 90;
+        aud.PlayOneShot(getAmmo);
     }
 
     IEnumerator Cooldown() {

@@ -16,7 +16,7 @@ public class KillPlane : MonoBehaviour
         
     }
 
-    void OnTriggerEnter(Collider other) {
+    void OnTriggerEnter(Collider other) {                           //change this to reload the scene when player falls into killplane
         if(other.gameObject.CompareTag("Player")) {
             Debug.Log(other.transform.position);
             other.transform.position = new Vector3(0f,1.5f,0f);
