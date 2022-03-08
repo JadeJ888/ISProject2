@@ -13,7 +13,7 @@ public class Gun : MonoBehaviour
 
     public bool debug = false; //set true to display debug msgs
     [Header("Audio")]
-    public AudioClip fire, getAmmo;          //make one for reload, shoot, pick up ammo, out of bullets
+    public AudioClip fire, getAmmo, emptyClip, outOfAmmo, reloadSound;        //make one for reload, shoot, pick up ammo, out of bullets
 
     //private variables
     [Header("Ammo Management")]
@@ -35,6 +35,7 @@ public class Gun : MonoBehaviour
     public void Reload() {                                      //I think I wanna add a delay later and an animation in the polish stage here
         if(clip == clipSize) {                                  //if I can figure that out
             if(debug) Debug.Log("Clip is already full.");
+
             return;
         }
 
@@ -44,10 +45,12 @@ public class Gun : MonoBehaviour
         if(totalAmmo + clip >= clipSize) {       
             totalAmmo -= (clipSize - clip);       
             clip = clipSize;             
+            aud.PlayOneShot(reloadSound); 
         } else {
             // throw the rest of the ammo into the clip
             clip = totalAmmo + clip;
             totalAmmo = 0;
+            aud.PlayOneShot(reloadSound); 
         }  
     }
 
@@ -63,6 +66,7 @@ public class Gun : MonoBehaviour
                 if(clip > 0) {
                 if(debug) Debug.Log("Pow!");
                 
+                
                 clip -= 1;
                 // create a copy of the bullet prefab
                 Rigidbody bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
@@ -73,7 +77,8 @@ public class Gun : MonoBehaviour
                 StartCoroutine(Cooldown());
                 aud.PlayOneShot(fire);                //PlayOneShot() will overlap sounds and .play with play once
             } else {
-                if(debug) Debug.Log("Out of Ammo!");
+                if(debug) Debug.Log("Reload Clip");
+                aud.PlayOneShot(emptyClip);
             }
         }
     }
